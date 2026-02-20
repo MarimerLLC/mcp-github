@@ -17,16 +17,26 @@ spec:
     spec:
       containers:
         - name: mcp-github
-          image: ghcr.io/marimerllc/mcp-github:latest
+          image: rockylhotka/mcp-github:latest
           ports:
             - containerPort: 8080
               protocol: TCP
           env:
-            - name: GitHub__Token
+            - name: GitHub__AppId
               valueFrom:
                 secretKeyRef:
                   name: github-mcp-secrets
-                  key: GitHub__Token
+                  key: GitHub__AppId
+            - name: GitHub__InstallationId
+              valueFrom:
+                secretKeyRef:
+                  name: github-mcp-secrets
+                  key: GitHub__InstallationId
+            - name: GitHub__PrivateKeyPem
+              valueFrom:
+                secretKeyRef:
+                  name: github-mcp-secrets
+                  key: GitHub__PrivateKeyPem
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
           resources:
