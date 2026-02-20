@@ -14,13 +14,12 @@ public class RepositoryTools
         _httpClientFactory = httpClientFactory;
     }
 
-    [McpServerTool(Name = "list_user_repos"), Description("List repositories for the authenticated GitHub user")]
-    public async Task<string> ListUserRepos(
-        [Description("Filter type: all, owner, public, private, member (default: owner)")] string? type = "owner",
+    [McpServerTool(Name = "list_installation_repos"), Description("List all repositories the GitHub App installation has been granted access to")]
+    public async Task<string> ListInstallationRepos(
         [Description("Number of results per page, max 100 (default: 30)")] int perPage = 30)
     {
         var client = _httpClientFactory.CreateClient("github");
-        var response = await client.GetAsync($"/user/repos?type={type}&per_page={perPage}");
+        var response = await client.GetAsync($"/installation/repositories?per_page={perPage}");
         return await GitHubApiHelper.ReadResponseAsync(response);
     }
 
