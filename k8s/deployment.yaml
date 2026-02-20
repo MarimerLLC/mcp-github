@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp-github
+  namespace: rockbot
+  labels:
+    app: mcp-github
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mcp-github
+  template:
+    metadata:
+      labels:
+        app: mcp-github
+    spec:
+      containers:
+        - name: mcp-github
+          image: ghcr.io/marimerllc/mcp-github:latest
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          env:
+            - name: GitHub__Token
+              valueFrom:
+                secretKeyRef:
+                  name: github-mcp-secrets
+                  key: GitHub__Token
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
